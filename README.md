@@ -38,7 +38,7 @@ Hey, Netology
 
 ## Решение 2
 
-![2]()
+![2](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t2.png)
 
 ## Задача 3
 1. Воспользуйтесь docker help или google, чтобы узнать как подключиться к стандартному потоку ввода/вывода/ошибок контейнера "custom-nginx-t2".
@@ -58,15 +58,35 @@ Hey, Netology
 
 ## Решение 3
 
-![1-4]()
-![5-6]()
-![7]()
-![8]()
-![9-10]()
-![11_1]()
-![11_2]()
-![11_3]()
-![11_4-12]()
+![1-4](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t3_1-4.png)
+
+При нажатии сочетания клавиш Ctrl+C внутри контейнера отправляется сигнал (SIGINT), из-за чего прерывается поток выполнения процесса.
+
+![5-6](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t3_5-6.png)
+
+![7](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t3_7.png)
+
+![8](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t3_8.png)
+
+![9-10](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t3_9-10.png)
+
+В шаге 7 мы изменили настройку nginx сервера прослушивать 81 порт, вместо 80. При запуске контейнера мы прописали перенаправлять порт 8080 хоста на 80 порт контейнера, поэтому при попытке войти по адресу 127.0.0.1:8080 мы стучимся на 80 порт контейнера, который уже не прослушивается сервисом nginx, из-за чего мы получаем ошибку.
+
+Для изменения конфигурации контейнера без его удаления нам сначала надо остановить его и сервис docker.
+
+![11_1](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t3_11_1.png)
+
+После чего мы меняем настройку самого контейнера в папке /var/lib/docker/containers/[id контейнера]/ в файлах hostconfig.json и config.v2.json
+
+![11_2](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t3_11_2.png)
+
+![11_3](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t3_11_3.png)
+
+После изменения порта на 81 включаем сервис docker и перезапускаем контейнер. Как видим в выводе команды docker port * имя контейнера * у нас изменился открытый порт в контейнере.
+
+![11_4-12](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t3_11_4-12.png)
+
+Для удаления запущенного контейнера нужно в команде docker rm использовать флаг -f
 
 ## Задача 4
 
@@ -80,7 +100,7 @@ Hey, Netology
 
 ## Решение 4
 
-![1]()
+![1](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t4.png)
 
 ## Задача 5
 
@@ -131,10 +151,22 @@ services:
 
 ## Решение 5
 
-![1]()
-![2]()
-![3]()
-![4]()
-![5_6-1]()
-![6-2]()
-![7]()
+![1](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t5_1.png)
+
+Команда docker compose up -d выбрала файл compose.yaml потому, что он является более предпочтительным, чем docker-compose.yaml. 
+
+![2](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t5_2.png)
+
+![3](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t5_3.png)
+
+![4](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t5_4.png)
+
+![5_6-1](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t5_6-1.png)
+
+![6-2](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t5_6-2.png)
+
+![7](https://github.com/murtazinilyas/05-virtd-docker-compose-mia/blob/main/docker_compose/t5_7.png)
+
+После удаления одного из .yaml файла и выполнения команды docker compose up -d докер нас предупреждает, что у нас остался контейнер, созданный предыдущей конфигурацией проекта и предлагает его удалить, добавив флаг --remove-orphans.
+
+Для погашения compose-проекта вводим команду docker compose down
